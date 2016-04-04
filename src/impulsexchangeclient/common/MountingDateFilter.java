@@ -1,6 +1,6 @@
 package impulsexchangeclient.common;
 
-import impulsexchangeclient.mysql.MySqlCapacitiesMapExctractor;
+import impulsexchangeclient.mysql.CapacitiesMapExctractor;
 import java.util.Calendar;
 import java.util.Map;
 
@@ -105,7 +105,7 @@ public class MountingDateFilter {
                 + Service.MINIMAL_DATE_OFFSET + orderReqDays));                 //смещаемся на месяц вперед (с запасом - чтобы уж точно никаких ошибок не было)
         String finalDatap = Service.convertToSqlDate(calendar);
 
-        MySqlCapacitiesMapExctractor mapExctractor = new MySqlCapacitiesMapExctractor(initialDatap, finalDatap);
+        CapacitiesMapExctractor mapExctractor = new CapacitiesMapExctractor(initialDatap, finalDatap);
         capacitiesMap = mapExctractor.extract();                                //получаем список нагрузок по дням на ближайшие 30 дней
     }
 

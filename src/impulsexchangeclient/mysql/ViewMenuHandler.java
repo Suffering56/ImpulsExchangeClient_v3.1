@@ -9,9 +9,9 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 
-public class MySqlViewHandler {
+public class ViewMenuHandler {
 
-    public MySqlViewHandler() {
+    public ViewMenuHandler() {
         mySqlInstance = MySqlConnector.getInstance();
         createStatement();
     }
@@ -54,7 +54,7 @@ public class MySqlViewHandler {
         } catch (SQLException ex) {
             resultList = null;
             JOptionPane.showMessageDialog(null, "Ошибка при работе с базой данных MySQL. \r\n"
-                    + "ex.toString(): " + ex, "MySqlViewHandler.getQueryResult()", JOptionPane.ERROR_MESSAGE);
+                    + "ex: " + ex, this.getClass().getName() + " : getQueryResult()", JOptionPane.ERROR_MESSAGE);
         }
         return resultList;
     }
@@ -76,7 +76,7 @@ public class MySqlViewHandler {
                 statement = connection.createStatement();
             } catch (SQLException ex) {
                 JOptionPane.showMessageDialog(null, "Ошибка при работе с базой данных MySQL. \r\n"
-                        + "ex.toString(): " + ex, "MySqlViewHandler.createStatement()", JOptionPane.ERROR_MESSAGE);
+                        + "ex: " + ex, this.getClass().getName() + " : createStatement()", JOptionPane.ERROR_MESSAGE);
                 statement = null;
             }
         } else {

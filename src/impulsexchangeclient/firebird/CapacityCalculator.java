@@ -1,10 +1,11 @@
 package impulsexchangeclient.firebird;
 
+import impulsexchangeclient.common.ConstructionEntity;
 import impulsexchangeclient.options.Options;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.Map;
+import java.util.List;
 
 public class CapacityCalculator {
 
@@ -17,15 +18,15 @@ public class CapacityCalculator {
      * конструкций.
      *
      * @param INVNO уникальный идентификатор заказа.
-     * @param ordnoMap таблица с идентификаторами конструкций (ORDNO) и
-     * количеством соответствующих конструкций (QTY) в данном заказе.
+     * @param constructionsList
      * @return int Capacity - общую нагрузку указанного заказа.
      * @throws java.sql.SQLException
      */
-    public int calculate(int INVNO, Map<Integer, Integer> ordnoMap) throws SQLException {
+    public int calculate(int INVNO, List<ConstructionEntity> constructionsList) throws SQLException {
         int capacity = 0;
-        for (int ORDNO : ordnoMap.keySet()) {
-            int QTY = ordnoMap.get(ORDNO);
+        for (ConstructionEntity construction : constructionsList) {
+            int ORDNO = construction.getOrdno();
+            int QTY = construction.getQty();
             int coefficient = getRatio(INVNO, ORDNO);
             capacity += coefficient * QTY;
         }

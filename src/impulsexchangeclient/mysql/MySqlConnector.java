@@ -39,7 +39,7 @@ public class MySqlConnector {
             Class.forName("com.mysql.jdbc.Driver");
         } catch (ClassNotFoundException ex) {
             JOptionPane.showMessageDialog(null, "Ошибка при загрузке драйвера MySQL (Class.forName). \r\n"
-                    + "ex.toString(): " + ex.toString(), "MySqlConnector.connect()", JOptionPane.ERROR_MESSAGE);
+                    + "ex: " + ex, this.getClass().getName() + " : connect()", JOptionPane.ERROR_MESSAGE);
             return null;
         }
 
@@ -69,7 +69,7 @@ public class MySqlConnector {
                 errorMsg = "Не удается найти указанную базу данных. Проверьте настройки MySQL.";
             }
             JOptionPane.showMessageDialog(null, "MySQL. Ошибка при установлении соединения с базой данных.\r\n"
-                    + errorMsg + "\r\n" + "ex.toString(): " + ex.toString(), "MySqlConnector.connect()", JOptionPane.ERROR_MESSAGE);
+                    + errorMsg + "\r\n" + "ex: " + ex, this.getClass().getName() + " : connect()", JOptionPane.ERROR_MESSAGE);
         }
         return connection;
     }
@@ -90,7 +90,7 @@ public class MySqlConnector {
             result = true;
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Ошибка при закрытии соединения: <connection.close()>. \r\n"
-                    + "ex.toString(): " + ex, "MySqlConnector.disconnect()", JOptionPane.ERROR_MESSAGE);
+                    + "ex: " + ex, this.getClass().getName() + " : disconnect()", JOptionPane.ERROR_MESSAGE);
         } finally {
             connection = null;
         }

@@ -135,7 +135,7 @@ public class Service {
             orderName = m.group(group);
         } else {
             JOptionPane.showMessageDialog(null, "Строка не соответствует регулярному выражению <" + order + ">",
-                    "Service : extractOrderName", JOptionPane.ERROR_MESSAGE);
+                    "Service : extractOrderParam", JOptionPane.ERROR_MESSAGE);
         }
         return orderName;
     }

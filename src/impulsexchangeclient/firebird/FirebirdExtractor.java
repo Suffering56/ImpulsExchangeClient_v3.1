@@ -1,13 +1,19 @@
 package impulsexchangeclient.firebird;
 
+import impulsexchangeclient.common.ConstructionEntity;
 import impulsexchangeclient.options.Options;
 import impulsexchangeclient.common.OrderEntity;
+import impulsexchangeclient.common.Service;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.JOptionPane;
 
 public class FirebirdExtractor {
@@ -37,8 +43,8 @@ public class FirebirdExtractor {
                 }
             } catch (SQLException ex) {
                 entity = null;
-                JOptionPane.showMessageDialog(null, "Ошибка при работе с базой данных Firebird. \r\n"
-                        + "ex.toString(): " + ex, "FirebirdExtractor.extractData()", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Ошибка при работе с базой данных FireBird. \r\n"
+                        + "ex: " + ex, this.getClass().getName() + " : run()", JOptionPane.ERROR_MESSAGE);
             } finally {
                 fbInstance.disconnect();
             }
@@ -71,12 +77,12 @@ public class FirebirdExtractor {
                 return true;
             case 0:
                 JOptionPane.showMessageDialog(null, "Заказ № <" + Options.getDepartmentName() + "/" + orderName + "> не найден в базе данных СуперОкна!",
-                        "FirebirdDataLoader.extractGeneralData()", JOptionPane.INFORMATION_MESSAGE);
+                        this.getClass().getName() + " : extractGeneralData()", JOptionPane.ERROR_MESSAGE);
                 return false;
             default:
-                JOptionPane.showMessageDialog(null, "Найдено сразу " + size + " заказа с номером <" + Options.getDepartmentName() + "/" + orderName + "> в базе данных! \r\n"
-                        + "Пожалуйста создайте новый заказ в программе СуперОкна.",
-                        "FirebirdDataLoader.extractGeneralData()", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Найдено сразу " + size + " заказа с номером <" + Options.getDepartmentName() + "/"
+                        + orderName + "> в базе данных! \r\n" + "Пожалуйста создайте новый заказ в программе СуперОкна.",
+                        this.getClass().getName() + " : extractGeneralData()", JOptionPane.ERROR_MESSAGE);
                 return false;
         }
     }
@@ -123,13 +129,20 @@ public class FirebirdExtractor {
         ResultSet rs = statement.executeQuery("SELECT * FROM INVSPEC where INVNO = " + entity.getInvno()
                 + " AND DEPNO  = " + Options.getDepartmentName());
         int constructionsCount = 0;
-        ordnoMap.clear();
+
+        constructionsList.clear();
         while (rs.next()) {
             int QTY = rs.getInt("QTY");
+            int ORDNO = rs.getInt("ORDNO");
+            //Blob scheme = rs.getBlob("SCHEME");
             constructionsCount += QTY;
-            ordnoMap.put(rs.getInt("ORDNO"), QTY);  //key = ORDNO, value = QTY
+
+            InputStream is = rs.getBinaryStream("SCHEME");
+            File scheme = readScheme(is);
+            constructionsList.add(new ConstructionEntity(ORDNO, QTY, scheme));
         }
         entity.setConstructionsCount(constructionsCount);
+        entity.setConstructionsList(constructionsList);
     }
 
     /**
@@ -138,7 +151,7 @@ public class FirebirdExtractor {
      */
     private void exctractCapacity() throws SQLException {
         CapacityCalculator calc = new CapacityCalculator(statement);
-        int capacity = calc.calculate(entity.getInvno(), ordnoMap);
+        int capacity = calc.calculate(entity.getInvno(), constructionsList);
         entity.setCapacity(capacity);
     }
 
@@ -160,8 +173,31 @@ public class FirebirdExtractor {
         return size;
     }
 
+    private File readScheme(InputStream is) {
+        FileOutputStream out = null;
+        try {
+            if (is != null) {
+                File scheme = File.createTempFile("scheme", ".emf");
+                out = new FileOutputStream(scheme);
+                byte[] buffer = new byte[1];
+                while (is.read(buffer) > 0) {
+                    out.write(buffer);
+                }
+                return scheme;
+            } else {
+                return null;
+            }
+        } catch (IOException ex) {
+            JOptionPane.showMessageDialog(null, "Произошла ошибка при извлечении данных о конструкциях. \r\n"
+                    + "ex: " + ex, this.getClass().getName() + " : readScheme()", JOptionPane.ERROR_MESSAGE);
+            return null;
+        } finally {
+            Service.streamClose(out);
+        }
+    }
+
     private final String orderName;
     private Statement statement;
     private OrderEntity entity;
-    private final Map<Integer, Integer> ordnoMap = new HashMap<>();
+    private final List<ConstructionEntity> constructionsList = new ArrayList<>();
 }

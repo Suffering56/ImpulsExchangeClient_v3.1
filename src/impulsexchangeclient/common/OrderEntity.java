@@ -1,5 +1,7 @@
 package impulsexchangeclient.common;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -155,6 +157,14 @@ public class OrderEntity {
         return difficultOrderMap;
     }
 
+    public List<ConstructionEntity> getConstructionsList() {
+        return constructionsList;
+    }
+
+    public void setConstructionsList(List<ConstructionEntity> constructionsList) {
+        this.constructionsList = constructionsList;
+    }
+
     @Override
     public String toString() {
         String orderMap = "difficultOrderMap(size = " + difficultOrderMap.size() + "): ";
@@ -200,4 +210,8 @@ public class OrderEntity {
      * SQL-запросов, во время экспорта заказа в отгрузку.
      */
     private final Map<String, Integer> difficultOrderMap = new TreeMap();
+    /**
+     * Содержит данные о конструкциях (номер конструкции, количество, схема)
+     */
+    private List<ConstructionEntity> constructionsList;
 }

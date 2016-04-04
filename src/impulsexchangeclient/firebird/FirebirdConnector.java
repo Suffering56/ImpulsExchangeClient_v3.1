@@ -39,7 +39,7 @@ public class FirebirdConnector {
             Class.forName("org.firebirdsql.jdbc.FBDriver");
         } catch (ClassNotFoundException ex) {
             JOptionPane.showMessageDialog(null, "Ошибка при загрузке драйвера (Class.forName). \r\n"
-                    + "ex.toString(): " + ex.toString(), "FirebirdConnector.connect()", JOptionPane.ERROR_MESSAGE);
+                    + "ex: " + ex, this.getClass().getName() + " : connect()", JOptionPane.ERROR_MESSAGE);
             return null;
         }
 
@@ -69,8 +69,8 @@ public class FirebirdConnector {
             } else if (ex.toString().contains("RuntimeException")) {
                 errorMsg = "Указана неверная кодировка. Проверьте настройки Firebird.";
             }
-            JOptionPane.showMessageDialog(null, errorMsg + "\r\n" + "ex: " + ex.toString(),
-                    "FirebirdConnector.connect()", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, errorMsg + "\r\n"
+                    + "ex: " + ex, this.getClass().getName() + " : connect()", JOptionPane.ERROR_MESSAGE);
         }
         return connection;
     }
@@ -91,7 +91,7 @@ public class FirebirdConnector {
             result = true;
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Ошибка при закрытии соединения: <connection.close()>. \r\n"
-                    + "ex.toString(): " + ex, "FirebirdConnector.disconnect()", JOptionPane.ERROR_MESSAGE);
+                    + "ex: " + ex, this.getClass().getName() + " : disconnect()", JOptionPane.ERROR_MESSAGE);
         } finally {
             connection = null;
         }

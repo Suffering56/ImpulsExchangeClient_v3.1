@@ -45,7 +45,8 @@ public class FBServerManager {
             }
         } catch (IOException ex) {
             JOptionPane.showMessageDialog(null, "Ошибка при запуске Firebird-сервера: <exec(" + FB_SERVER_PROCESS_NAME + " -a)>. \r\n"
-                    + "Проверьте настройки Firebird.\r\n" + "ex.toString(): " + ex, "FBServerManager.run()", JOptionPane.ERROR_MESSAGE);
+                    + "Проверьте настройки Firebird.\r\n"
+                    + "ex: " + ex, this.getClass().getName() + " : run()", JOptionPane.ERROR_MESSAGE);
         } finally {
             Service.streamClose(in);
         }

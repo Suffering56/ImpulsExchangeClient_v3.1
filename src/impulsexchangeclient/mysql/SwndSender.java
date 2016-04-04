@@ -142,8 +142,6 @@ public class SwndSender {
     }
 
     private boolean orderExistCheck() throws SQLException {
-        System.out.println("SELECT * FROM `exchange_orders` WHERE `dep_id` = '" + Options.getDepartmentName()
-                + "' AND `order_name` = '" + orderName + "'");
         ResultSet rs = stmt.executeQuery("SELECT * FROM `exchange_orders` WHERE `dep_id` = '" + Options.getDepartmentName()
                 + "' AND `order_name` = '" + orderName + "'");
         int size = 0;
@@ -195,7 +193,7 @@ public class SwndSender {
             connection.setAutoCommit(true);
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Произошла ошибка при установлении параметра AutoCommit(true). \r\n"
-                    + "ex.toString(): " + ex, this.getClass().getName() + " : AutoCommit(true)", JOptionPane.ERROR_MESSAGE);
+                    + "ex: " + ex, this.getClass().getName() + " : AutoCommit(true)", JOptionPane.ERROR_MESSAGE);
         }
     }
 

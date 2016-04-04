@@ -1,7 +1,13 @@
 package impulsexchangeclient.mysql;
 
+import impulsexchangeclient.common.ConstructionEntity;
 import impulsexchangeclient.common.OrderEntity;
+import impulsexchangeclient.common.Service;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -22,29 +28,35 @@ public class MonitorSender {
     public boolean run() {
         boolean result = false;
         MySqlConnector mySqlInstance = MySqlConnector.getInstance();
-        Connection connection = mySqlInstance.connect();
+        connection = mySqlInstance.connect();
         if (connection != null) {
             try {
                 connection.setAutoCommit(false);
                 statement = connection.createStatement();
                 executeGeneralTransaction();
                 connection.commit();
+                insertConstructionsData();
+                connection.commit();
                 result = true;
             } catch (SQLException ex) {
                 JOptionPane.showMessageDialog(null, "Ошибка при работе с базой данных MySQL. \r\n"
-                        + "ex.toString(): " + ex, "MySqlSender.export()", JOptionPane.ERROR_MESSAGE);
+                        + "ex: " + ex, this.getClass().getName() + " : run()", JOptionPane.ERROR_MESSAGE);
                 try {
                     connection.rollback();
                 } catch (SQLException exx) {
                     JOptionPane.showMessageDialog(null, "Произошла ошибка при откате изменений в MySQL. \r\n"
-                            + "ex.toString(): " + exx, "MySqlSender.rollback()", JOptionPane.ERROR_MESSAGE);
+                            + "ex: " + exx, this.getClass().getName() + " : rollback()", JOptionPane.ERROR_MESSAGE);
                 }
+            } catch (FileNotFoundException ex) {
+                JOptionPane.showMessageDialog(null, "Произошла ошибка при импорте схемы конструкций. \r\n"
+                        + "Не найден временный файл схемы. \r\n" + "ex: " + ex,
+                        this.getClass().getName() + " : insertConstructionsData()", JOptionPane.ERROR_MESSAGE);
             } finally {
                 try {
                     connection.setAutoCommit(true);
                 } catch (SQLException ex) {
                     JOptionPane.showMessageDialog(null, "Произошла ошибка при установлении параметра AutoCommit(true). \r\n"
-                            + "ex.toString(): " + ex, "MySqlSender.setAutoCommit(true)", JOptionPane.ERROR_MESSAGE);
+                            + "ex: " + ex, this.getClass().getName() + " : setAutoCommit(true)", JOptionPane.ERROR_MESSAGE);
                 }
                 mySqlInstance.disconnect();
             }
@@ -108,8 +120,9 @@ public class MonitorSender {
         if (deleteResult > 0) {
             queriesPreparation(entity);                                         //добавляем новый заказ в отгрузку!!!
         } else {                                                                //если заказ почему-то не удалился
-            JOptionPane.showMessageDialog(null, "Произошла ошибка при удалении заказа №" + fOrder + ">\r\n"
-                    + "Заказ остался в отгрузочной программе без изменений", "MySqlSender.export()", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Произошла ошибка при удалении заказа №"
+                    + fOrder + ">\r\n" + "Заказ остался в отгрузочной программе без изменений",
+                    this.getClass().getName() + " : replaceOrder()", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -139,7 +152,36 @@ public class MonitorSender {
                 + nagruz + SEPARATOR + entity.getMaster() + SEPARATOR + "1" + SEPARATOR + "1" + SEPARATOR
                 + datap + SEPARATOR + entity.getMountingDate() + SEPARATOR + entity.getContacts() + SEPARATOR + "0" + SEPARATOR
                 + "0" + SEPARATOR + entity.getGarbage() + SEPARATOR + entity.getLamination() + SEPARATOR + entity.getDescription() + SEPARATOR + entity.getComment() + "')";
-        statement.executeUpdate(query);
+
+        PreparedStatement prepStmt = connection.prepareStatement(query);
+        prepStmt.executeUpdate();
+    }
+
+    private void insertConstructionsData() throws SQLException, FileNotFoundException {
+        String dep_id = entity.getFullOrderName().split("/")[0];
+        String order_name = entity.getFullOrderName().split("/")[1];
+
+        connection.prepareStatement("DELETE FROM `exchange_constructions` "
+                + "WHERE `dep_id` = '" + dep_id + "' AND `order_name` = '" + order_name + "'").executeUpdate();
+
+        String query = "INSERT INTO `exchange_constructions` "
+                + "(`dep_id`, `order_name`, `constr_ordno`, `constr_qty`, `constr_scheme`) "
+                + "VALUES('" + dep_id + "', '" + order_name + "', ?, ?, ?)";
+        PreparedStatement insertPrepStmt = connection.prepareStatement(query);
+
+        for (ConstructionEntity construction : entity.getConstructionsList()) {
+            File scheme = construction.getScheme();
+            FileInputStream fin = new FileInputStream(scheme);
+
+            insertPrepStmt.setInt(1, construction.getOrdno());
+            insertPrepStmt.setInt(2, construction.getQty());
+            insertPrepStmt.setBinaryStream(3, fin, (int) scheme.length());
+
+            insertPrepStmt.executeUpdate();
+            insertPrepStmt.clearParameters();
+            Service.streamClose(fin);
+            scheme.delete();
+        }
     }
 
     /**
@@ -176,6 +218,7 @@ public class MonitorSender {
     }
 
     private final OrderEntity entity;
+    private Connection connection;
     private Statement statement;
     private static final String SEPARATOR = "', '";
 }

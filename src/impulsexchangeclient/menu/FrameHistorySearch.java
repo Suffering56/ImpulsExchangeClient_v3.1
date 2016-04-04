@@ -179,7 +179,7 @@ public class FrameHistorySearch extends javax.swing.JFrame {
         } catch (SQLException ex) {
             String errorMsg = "Неизвестная ошибка. Описание:";
             JOptionPane.showMessageDialog(null, "SQLException. Произошла ошибка при чтении архива. \r\n"
-                    + errorMsg + "\r\n" + "ex: " + ex, this.getClass().getName() + " : readHistory()", JOptionPane.ERROR_MESSAGE);
+                    + errorMsg + "\r\n" + "ex: " + ex, this.getClass().getName() + " : doSearch()", JOptionPane.ERROR_MESSAGE);
         } finally {
             mySqlInstance.disconnect();
         }

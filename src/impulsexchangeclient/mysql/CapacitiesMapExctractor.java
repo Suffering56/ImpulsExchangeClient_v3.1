@@ -8,9 +8,9 @@ import java.util.HashMap;
 import java.util.Map;
 import javax.swing.JOptionPane;
 
-public class MySqlCapacitiesMapExctractor {
+public class CapacitiesMapExctractor {
 
-    public MySqlCapacitiesMapExctractor(String startDatap, String finishDatap) {
+    public CapacitiesMapExctractor(String startDatap, String finishDatap) {
         this.initialDatap = startDatap;
         this.finalDatap = finishDatap;
     }
@@ -53,7 +53,7 @@ public class MySqlCapacitiesMapExctractor {
         } catch (SQLException ex) {
             capacitiesMap = null;
             JOptionPane.showMessageDialog(null, "Ошибка при работе с базой данных MySQL. \r\n"
-                    + "ex.toString(): " + ex, "MySqlCapacitiesMapExctractor.extractCapacitiesMap()", JOptionPane.ERROR_MESSAGE);
+                    + "ex: " + ex, this.getClass().getName() + " : extractCapacitiesMap()", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -68,7 +68,7 @@ public class MySqlCapacitiesMapExctractor {
                 statement = connection.createStatement();
             } catch (SQLException ex) {
                 JOptionPane.showMessageDialog(null, "Ошибка при работе с базой данных MySQL. \r\n"
-                        + "ex.toString(): " + ex, "MySqlCapacitiesMapExctractor.createStatement()", JOptionPane.ERROR_MESSAGE);
+                        + "ex: " + ex, this.getClass().getName() + " : createStatement()", JOptionPane.ERROR_MESSAGE);
                 statement = null;
             }
         } else {

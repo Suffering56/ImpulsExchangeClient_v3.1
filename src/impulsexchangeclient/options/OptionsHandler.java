@@ -65,7 +65,7 @@ public class OptionsHandler {
             TransformerFactory.newInstance().newTransformer().transform(new DOMSource(doc), new StreamResult(out));
         } catch (DOMException | IOException | TransformerException | XPathExpressionException ex) {
             JOptionPane.showMessageDialog(null, "Ошибка при сохранении настроек программы: \r\n"
-                    + "ex.toString(): " + ex.toString(), "OptionsHandler.saveOptions()", JOptionPane.ERROR_MESSAGE);
+                    + "ex: " + ex, "OptionsHandler.saveOptions()", JOptionPane.ERROR_MESSAGE);
         } finally {
             Service.streamClose(out);
         }
@@ -167,7 +167,7 @@ public class OptionsHandler {
 
         } catch (XPathExpressionException | ParserConfigurationException | SAXException | IOException | DOMException | NullPointerException ex) {
             JOptionPane.showMessageDialog(null, "Ошибка чтения настроек программы: \r\n"
-                    + "ex.toString(): " + ex.toString(), "OptionsHandler.readOptions()", JOptionPane.ERROR_MESSAGE);
+                    + "ex: " + ex, "OptionsHandler.readOptions()", JOptionPane.ERROR_MESSAGE);
         }
     }
 
