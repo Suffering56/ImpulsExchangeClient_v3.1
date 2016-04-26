@@ -47,8 +47,8 @@ public class SwndSender {
             return true;
 
         } catch (SQLException ex) {
-            rollback();
             showSqlExceptionDlg(ex);
+            rollback();
             return false;
         } catch (FileNotFoundException ex) {
             showFNFException(ex);
