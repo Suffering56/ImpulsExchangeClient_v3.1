@@ -35,9 +35,9 @@ public class MonitorSender {
                 statement = connection.createStatement();
                 executeGeneralTransaction();
                 connection.commit();
+                result = true;
                 insertConstructionsData();
                 connection.commit();
-                result = true;
             } catch (SQLException ex) {
                 JOptionPane.showMessageDialog(null, "Ошибка при работе с базой данных MySQL. \r\n"
                         + "ex: " + ex, this.getClass().getName() + " : run()", JOptionPane.ERROR_MESSAGE);
@@ -48,7 +48,7 @@ public class MonitorSender {
                             + "ex: " + exx, this.getClass().getName() + " : rollback()", JOptionPane.ERROR_MESSAGE);
                 }
             } catch (FileNotFoundException ex) {
-                JOptionPane.showMessageDialog(null, "Произошла ошибка при импорте схемы конструкций. \r\n"
+                JOptionPane.showMessageDialog(null, "Произошла ошибка импорта схем конструкций. \r\n"
                         + "Не найден временный файл схемы. \r\n" + "ex: " + ex,
                         this.getClass().getName() + " : insertConstructionsData()", JOptionPane.ERROR_MESSAGE);
             } finally {
