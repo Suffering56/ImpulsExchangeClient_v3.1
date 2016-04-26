@@ -74,9 +74,9 @@
                           <Component id="firebirdEncodingField" min="-2" pref="172" max="-2" attributes="0"/>
                       </Group>
                       <Group type="102" alignment="1" attributes="0">
-                          <Component id="cancelBtn" max="32767" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Component id="saveBtn" min="-2" pref="140" max="-2" attributes="0"/>
+                          <Component id="cancelBtn" min="-2" pref="95" max="-2" attributes="0"/>
+                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                          <Component id="saveBtn" max="32767" attributes="0"/>
                       </Group>
                       <Group type="102" alignment="1" attributes="0">
                           <Component id="jLabel6" linkSize="2" min="-2" max="-2" attributes="0"/>

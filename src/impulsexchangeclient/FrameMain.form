@@ -89,37 +89,6 @@
             </MenuItem>
           </SubComponents>
         </Menu>
-        <Menu class="javax.swing.JMenu" name="helpMenu">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="&#x421;&#x43f;&#x440;&#x430;&#x432;&#x43a;&#x430;"/>
-          </Properties>
-          <SubComponents>
-            <MenuItem class="javax.swing.JMenuItem" name="helpManualCallBtn">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="&#x420;&#x443;&#x43a;&#x43e;&#x432;&#x43e;&#x434;&#x441;&#x442;&#x432;&#x43e; &#x43f;&#x43e; &#x438;&#x441;&#x43f;&#x43e;&#x43b;&#x44c;&#x437;&#x43e;&#x432;&#x430;&#x43d;&#x438;&#x44e;"/>
-              </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="helpManualCallBtnActionPerformed"/>
-              </Events>
-            </MenuItem>
-            <MenuItem class="javax.swing.JMenuItem" name="helpAdditionalCallBtn">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="&#x414;&#x43e;&#x43f;&#x43e;&#x43b;&#x43d;&#x438;&#x442;&#x435;&#x43b;&#x44c;&#x43d;&#x44b;&#x435; &#x444;&#x443;&#x43d;&#x43a;&#x446;&#x438;&#x438;"/>
-              </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="helpAdditionalCallBtnActionPerformed"/>
-              </Events>
-            </MenuItem>
-            <MenuItem class="javax.swing.JMenuItem" name="helpErrorsCallBtn">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="&#x412;&#x43e;&#x437;&#x43c;&#x43e;&#x436;&#x43d;&#x44b;&#x435; &#x43e;&#x448;&#x438;&#x431;&#x43a;&#x438;"/>
-              </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="helpErrorsCallBtnActionPerformed"/>
-              </Events>
-            </MenuItem>
-          </SubComponents>
-        </Menu>
       </SubComponents>
     </Menu>
   </NonVisualComponents>

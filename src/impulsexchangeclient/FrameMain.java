@@ -1,8 +1,6 @@
 package impulsexchangeclient;
 
-import impulsexchangeclient.menu.FrameHelpAdditional;
-import impulsexchangeclient.menu.FrameHelpErrors;
-import impulsexchangeclient.menu.FrameHelpManual;
+import impulsexchangeclient.options.FrameOptionsAccess;
 import impulsexchangeclient.entities.OrderEntity;
 import impulsexchangeclient.options.Options;
 import impulsexchangeclient.firebird.FirebirdExtractor;
@@ -37,10 +35,6 @@ public class FrameMain extends javax.swing.JFrame {
         archivesMenu = new javax.swing.JMenu();
         archiveCallBtn = new javax.swing.JMenuItem();
         doSearchBtn = new javax.swing.JMenuItem();
-        helpMenu = new javax.swing.JMenu();
-        helpManualCallBtn = new javax.swing.JMenuItem();
-        helpAdditionalCallBtn = new javax.swing.JMenuItem();
-        helpErrorsCallBtn = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
@@ -177,34 +171,6 @@ public class FrameMain extends javax.swing.JFrame {
 
         jMenuBar1.add(archivesMenu);
 
-        helpMenu.setText("Справка");
-
-        helpManualCallBtn.setText("Руководство по использованию");
-        helpManualCallBtn.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                helpManualCallBtnActionPerformed(evt);
-            }
-        });
-        helpMenu.add(helpManualCallBtn);
-
-        helpAdditionalCallBtn.setText("Дополнительные функции");
-        helpAdditionalCallBtn.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                helpAdditionalCallBtnActionPerformed(evt);
-            }
-        });
-        helpMenu.add(helpAdditionalCallBtn);
-
-        helpErrorsCallBtn.setText("Возможные ошибки");
-        helpErrorsCallBtn.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                helpErrorsCallBtnActionPerformed(evt);
-            }
-        });
-        helpMenu.add(helpErrorsCallBtn);
-
-        jMenuBar1.add(helpMenu);
-
         setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -261,15 +227,15 @@ public class FrameMain extends javax.swing.JFrame {
     }//GEN-LAST:event_doSearchBtnActionPerformed
 
     private void departmentOptionsCallBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_departmentOptionsCallBtnActionPerformed
-        new FrameAccessOptions(this, "Department").setVisible(true);
+        new FrameOptionsAccess(this, "Department").setVisible(true);
     }//GEN-LAST:event_departmentOptionsCallBtnActionPerformed
 
     private void firebirdOptionsCallBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_firebirdOptionsCallBtnActionPerformed
-        new FrameAccessOptions(this, "Firebird").setVisible(true);
+        new FrameOptionsAccess(this, "Firebird").setVisible(true);
     }//GEN-LAST:event_firebirdOptionsCallBtnActionPerformed
 
     private void mySqlOptionsCallBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mySqlOptionsCallBtnActionPerformed
-        new FrameAccessOptions(this, "MySQL").setVisible(true);
+        new FrameOptionsAccess(this, "MySQL").setVisible(true);
     }//GEN-LAST:event_mySqlOptionsCallBtnActionPerformed
 
     private void exitMenuBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitMenuBtnActionPerformed
@@ -286,20 +252,8 @@ public class FrameMain extends javax.swing.JFrame {
         new FrameMonitorViewer(this).setVisible(true);
     }//GEN-LAST:event_monitorViewerCallBtnActionPerformed
 
-    private void helpManualCallBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_helpManualCallBtnActionPerformed
-        new FrameHelpManual(this).setVisible(true);
-    }//GEN-LAST:event_helpManualCallBtnActionPerformed
-
-    private void helpAdditionalCallBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_helpAdditionalCallBtnActionPerformed
-        new FrameHelpAdditional(this).setVisible(true);
-    }//GEN-LAST:event_helpAdditionalCallBtnActionPerformed
-
-    private void helpErrorsCallBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_helpErrorsCallBtnActionPerformed
-        new FrameHelpErrors(this).setVisible(true);
-    }//GEN-LAST:event_helpErrorsCallBtnActionPerformed
-
     private void adminOptionsCallBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_adminOptionsCallBtnActionPerformed
-        new FrameAccessOptions(this, "ADMIN").setVisible(true);
+        new FrameOptionsAccess(this, "ADMIN").setVisible(true);
     }//GEN-LAST:event_adminOptionsCallBtnActionPerformed
 
 
@@ -429,10 +383,6 @@ public class FrameMain extends javax.swing.JFrame {
     private javax.swing.JMenuItem doSearchBtn;
     private javax.swing.JMenuItem exitMenuBtn;
     private javax.swing.JMenuItem firebirdOptionsCallBtn;
-    private javax.swing.JMenuItem helpAdditionalCallBtn;
-    private javax.swing.JMenuItem helpErrorsCallBtn;
-    private javax.swing.JMenuItem helpManualCallBtn;
-    private javax.swing.JMenu helpMenu;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JLabel label1;

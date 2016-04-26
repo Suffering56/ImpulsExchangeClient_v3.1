@@ -1,4 +1,4 @@
-package impulsexchangeclient.menu;
+package impulsexchangeclient.options;
 
 import impulsexchangeclient.options.FrameOptionsAdmin;
 import impulsexchangeclient.options.FrameOptionsMySQL;
@@ -8,7 +8,7 @@ import impulsexchangeclient.FrameMain;
 import impulsexchangeclient.options.Options;
 import javax.swing.JOptionPane;
 
-public class FrameAccessOptions extends javax.swing.JFrame {
+public class FrameOptionsAccess extends javax.swing.JFrame {
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -65,7 +65,7 @@ public class FrameAccessOptions extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    public FrameAccessOptions(FrameMain mainFrame, String nextFrame) {
+    public FrameOptionsAccess(FrameMain mainFrame, String nextFrame) {
         this.mainFrame = mainFrame;
         this.nextFrame = nextFrame;
         initComponents();
