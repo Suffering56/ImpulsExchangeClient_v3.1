@@ -1,4 +1,4 @@
-package impulsexchangeclient.common;
+package impulsexchangeclient.entities;
 
 public class MonitorViewEntity {
 

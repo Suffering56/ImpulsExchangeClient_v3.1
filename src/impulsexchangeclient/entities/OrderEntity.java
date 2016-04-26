@@ -1,4 +1,4 @@
-package impulsexchangeclient.common;
+package impulsexchangeclient.entities;
 
 import java.util.ArrayList;
 import java.util.List;

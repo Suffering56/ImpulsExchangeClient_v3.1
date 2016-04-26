@@ -1,6 +1,6 @@
 package impulsexchangeclient.firebird;
 
-import impulsexchangeclient.common.ConstructionEntity;
+import impulsexchangeclient.entities.ConstructionEntity;
 import impulsexchangeclient.options.Options;
 import java.sql.ResultSet;
 import java.sql.SQLException;

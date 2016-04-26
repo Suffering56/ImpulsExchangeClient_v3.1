@@ -7,8 +7,6 @@ import java.io.OutputStream;
 import java.util.Calendar;
 import java.util.Formatter;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import javax.swing.JOptionPane;
 
 public class Service {
@@ -119,25 +117,6 @@ public class Service {
     private static void showExceptionDlg(IOException ex) {
         JOptionPane.showMessageDialog(null, "Ошибка освобождения ресурсов (stream.close()). \r\n"
                 + "ex: " + ex, "Service : StreamClose", JOptionPane.ERROR_MESSAGE);
-    }
-
-    /**
-     *
-     * @param order строка типа: <номер заказа=дата время;>
-     * @param group 1 - вернет номер заказа, 2 - вернет дату + время
-     * @return подстроку соответствующую параметру group
-     */
-    public static String extractOrderParam(String order, int group) {
-        String orderName = "null";
-        Pattern p = Pattern.compile("(\\d+)=(.+)");
-        Matcher m = p.matcher(order);
-        if (m.matches()) {
-            orderName = m.group(group);
-        } else {
-            JOptionPane.showMessageDialog(null, "Строка не соответствует регулярному выражению <" + order + ">",
-                    "Service : extractOrderParam", JOptionPane.ERROR_MESSAGE);
-        }
-        return orderName;
     }
 
     /**

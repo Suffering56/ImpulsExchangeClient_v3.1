@@ -2,9 +2,9 @@ package impulsexchangeclient.menu;
 
 import impulsexchangeclient.FrameMain;
 import impulsexchangeclient.common.ExtendedDefaultTableModel;
-import impulsexchangeclient.common.MonitorViewEntity;
+import impulsexchangeclient.entities.MonitorViewEntity;
 import impulsexchangeclient.common.Service;
-import impulsexchangeclient.mysql.ViewMenuHandler;
+import impulsexchangeclient.mysql.MenuMonitorHandler;
 import java.beans.PropertyChangeEvent;
 import java.util.Calendar;
 import java.util.List;
@@ -120,7 +120,7 @@ public class FrameMonitorViewer extends javax.swing.JFrame {
         this.mainFrame = mainFrame;
         initComponents();
         setLocationRelativeTo(null);
-        handler = new ViewMenuHandler();
+        handler = new MenuMonitorHandler();
         mainFrame.setEnabled(false);
         otherInit();
     }
@@ -200,7 +200,7 @@ public class FrameMonitorViewer extends javax.swing.JFrame {
 
     private Calendar cal;
     private final FrameMain mainFrame;
-    private final ViewMenuHandler handler;
+    private final MenuMonitorHandler handler;
     private final ExtendedDefaultTableModel tableModel = new ExtendedDefaultTableModel();
 
     /**

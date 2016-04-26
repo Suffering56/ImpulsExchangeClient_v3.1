@@ -3,7 +3,7 @@ package impulsexchangeclient;
 import impulsexchangeclient.common.MountingDateFilter;
 import impulsexchangeclient.common.Service;
 import impulsexchangeclient.common.EnabledJComboBoxRenderer;
-import impulsexchangeclient.common.OrderEntity;
+import impulsexchangeclient.entities.OrderEntity;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Formatter;

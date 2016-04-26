@@ -1,8 +1,8 @@
 package impulsexchangeclient.firebird;
 
-import impulsexchangeclient.common.ConstructionEntity;
+import impulsexchangeclient.entities.ConstructionEntity;
 import impulsexchangeclient.options.Options;
-import impulsexchangeclient.common.OrderEntity;
+import impulsexchangeclient.entities.OrderEntity;
 import impulsexchangeclient.common.Service;
 import java.io.File;
 import java.io.FileOutputStream;

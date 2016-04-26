@@ -3,7 +3,7 @@ package impulsexchangeclient;
 import impulsexchangeclient.menu.FrameHelpAdditional;
 import impulsexchangeclient.menu.FrameHelpErrors;
 import impulsexchangeclient.menu.FrameHelpManual;
-import impulsexchangeclient.common.OrderEntity;
+import impulsexchangeclient.entities.OrderEntity;
 import impulsexchangeclient.options.Options;
 import impulsexchangeclient.firebird.FirebirdExtractor;
 import impulsexchangeclient.menu.*;

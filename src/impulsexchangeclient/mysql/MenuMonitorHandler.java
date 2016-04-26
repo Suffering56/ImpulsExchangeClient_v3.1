@@ -1,6 +1,6 @@
 package impulsexchangeclient.mysql;
 
-import impulsexchangeclient.common.MonitorViewEntity;
+import impulsexchangeclient.entities.MonitorViewEntity;
 import impulsexchangeclient.options.Options;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -9,9 +9,9 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 
-public class ViewMenuHandler {
+public class MenuMonitorHandler {
 
-    public ViewMenuHandler() {
+    public MenuMonitorHandler() {
         mySqlInstance = MySqlConnector.getInstance();
         createStatement();
     }

@@ -1,4 +1,4 @@
-package impulsexchangeclient.common;
+package impulsexchangeclient.entities;
 
 import java.io.File;
 import java.sql.Blob;
