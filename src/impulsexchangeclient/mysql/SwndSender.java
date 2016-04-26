@@ -42,6 +42,7 @@ public class SwndSender {
 
             exchangeSwndUpdate(in);
             exchangeOrdersUpdate();
+            exchangeHistoryUpdate();
 
             connection.commit();
             return true;
@@ -69,20 +70,16 @@ public class SwndSender {
      */
     private void exchangeSwndUpdate(InputStream in) throws SQLException {
         PreparedStatement swndPrepStmt;
-        String newHistoryString = getNewHistoryString();
-
         if (departmentExistCheck() == true) {
-            swndPrepStmt = connection.prepareStatement("UPDATE `exchange_swnd` SET `history` = ?, `swnd` = ? "
+            swndPrepStmt = connection.prepareStatement("UPDATE `exchange_swnd` SET `swnd` = ? "
                     + "WHERE `dep_id` = '" + Options.getDepartmentName() + "'");
-            swndPrepStmt.setString(1, newHistoryString);
-            swndPrepStmt.setBinaryStream(2, in, (int) swndFile.length());
+            swndPrepStmt.setBinaryStream(1, in, (int) swndFile.length());
 
         } else {
             swndPrepStmt = connection.prepareStatement("INSERT INTO `exchange_swnd` "
-                    + "(`dep_id`, `history`, `swnd`) VALUES(?, ?, ?)");
+                    + "(`dep_id`, `swnd`) VALUES(?, ?)");
             swndPrepStmt.setInt(1, Integer.valueOf(Options.getDepartmentName()));
-            swndPrepStmt.setString(2, newHistoryString);
-            swndPrepStmt.setBinaryStream(3, in, (int) swndFile.length());
+            swndPrepStmt.setBinaryStream(2, in, (int) swndFile.length());
 
         }
         swndPrepStmt.executeUpdate();
@@ -112,23 +109,18 @@ public class SwndSender {
     }
 
     /**
-     ***************************************************************************
-     ****************** Вспомогательные функции и методы. ********************
+     * Выполняет запросы на обновление таблицы exchange_history, содержащей
+     * архив всех заказов, отправленных клиентами.
+     *
+     * @throws SQLException
      */
-    private String getNewHistoryString() throws SQLException {
-        String oldHistoryString = null;
-        ResultSet rs = stmt.executeQuery(
-                "SELECT `history` FROM `exchange_swnd` WHERE `dep_id` = '" + Options.getDepartmentName() + "'");
-        while (rs.next()) {
-            oldHistoryString = rs.getString("history");
-        }
-
-        String currentTime = getCurrentTimeString();
-        String newHistoryString = orderName + "=" + currentTime + ";";
-        if (oldHistoryString != null) {
-            newHistoryString += oldHistoryString;
-        }
-        return newHistoryString;
+    private void exchangeHistoryUpdate() throws SQLException {
+        PreparedStatement orderInsertPrepStmt = connection.prepareStatement("INSERT INTO `exchange_history` "
+                + "(`dep_id`, `order_name`, `time`) VALUES (?, ?, ?)");
+        orderInsertPrepStmt.setInt(1, Integer.valueOf(Options.getDepartmentName()));
+        orderInsertPrepStmt.setInt(2, Integer.valueOf(orderName));
+        orderInsertPrepStmt.setString(3, getCurrentTimeString());
+        orderInsertPrepStmt.executeUpdate();
     }
 
     private boolean departmentExistCheck() throws SQLException {

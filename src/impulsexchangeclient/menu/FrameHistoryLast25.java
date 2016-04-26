@@ -1,17 +1,16 @@
 package impulsexchangeclient.menu;
 
 import impulsexchangeclient.FrameMain;
-import impulsexchangeclient.common.Service;
 import impulsexchangeclient.mysql.MySqlConnector;
 import impulsexchangeclient.options.Options;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
 
-public class FrameHistory25 extends javax.swing.JFrame {
+public class FrameHistoryLast25 extends javax.swing.JFrame {
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -102,7 +101,7 @@ public class FrameHistory25 extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    public FrameHistory25(FrameMain mainFrame) {
+    public FrameHistoryLast25(FrameMain mainFrame) {
         this.mainFrame = mainFrame;
         initComponents();
         boolean success = readHistory();
@@ -118,34 +117,23 @@ public class FrameHistory25 extends javax.swing.JFrame {
         MySqlConnector mySqlInstance = MySqlConnector.getInstance();
         Connection connection = mySqlInstance.connect();
         try {
-            Statement stmt = connection.createStatement();
-            ResultSet rs = stmt.executeQuery(
-                    "SELECT `history` FROM `exchange` WHERE `department_id` = '" + Options.getDepartmentName() + "'");
-            String oldHistoryString = "";
-            while (rs.next()) {
-                oldHistoryString = rs.getString("history");
-                if (rs.getString("history") == null) {
-                    oldHistoryString = "";
-                }
-            }
+            String depName = Options.getDepartmentName();
             ordersList.clear();
             datesList.clear();
-            int counter = 0;
-            for (String order : oldHistoryString.split(";")) {
-                if (counter < 25) {
-                    ordersList.addElement(Service.extractOrderParam(order, 1));
-                    datesList.addElement(Service.extractOrderParam(order, 2));
-                    counter++;
-                } else {
-                    break;
-                }
+
+            PreparedStatement prepStmt = connection.prepareStatement(
+                    "SELECT * FROM `exchange_history` WHERE `dep_id` = ? ORDER BY `id` DESC LIMIT 25");
+            prepStmt.setString(1, depName);
+
+            ResultSet rs = prepStmt.executeQuery();
+            while (rs.next()) {
+                ordersList.addElement(depName + "/" + rs.getInt("order_name"));
+                datesList.addElement(rs.getString("time"));
             }
             return true;
-
         } catch (SQLException ex) {
-            String errorMsg = "Неизвестная ошибка. Описание:";
             JOptionPane.showMessageDialog(null, "SQLException. Произошла ошибка при чтении архива. \r\n"
-                    + errorMsg + "\r\n" + "ex: " + ex, this.getClass().getName() + " : readHistory()", JOptionPane.ERROR_MESSAGE);
+                    + "ex: " + ex, this.getClass().getName() + " : readHistory()", JOptionPane.ERROR_MESSAGE);
             return false;
         } finally {
             mySqlInstance.disconnect();

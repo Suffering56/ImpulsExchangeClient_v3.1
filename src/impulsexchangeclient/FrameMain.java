@@ -253,7 +253,7 @@ public class FrameMain extends javax.swing.JFrame {
     }//GEN-LAST:event_formWindowGainedFocus
 
     private void archiveCallBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_archiveCallBtnActionPerformed
-        new FrameHistory25(this).setVisible(true);
+        new FrameHistoryLast25(this).setVisible(true);
     }//GEN-LAST:event_archiveCallBtnActionPerformed
 
     private void doSearchBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_doSearchBtnActionPerformed

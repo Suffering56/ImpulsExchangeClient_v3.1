@@ -1,13 +1,12 @@
 package impulsexchangeclient.menu;
 
 import impulsexchangeclient.FrameMain;
-import impulsexchangeclient.common.Service;
 import impulsexchangeclient.mysql.MySqlConnector;
 import impulsexchangeclient.options.Options;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
 
@@ -22,8 +21,6 @@ public class FrameHistorySearch extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jOrdersList = new javax.swing.JList();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        jDatesList = new javax.swing.JList();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Поиск");
@@ -69,27 +66,7 @@ public class FrameHistorySearch extends javax.swing.JFrame {
                 generalKeyPressed(evt);
             }
         });
-        jOrdersList.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
-            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
-                jOrdersListValueChanged(evt);
-            }
-        });
         jScrollPane1.setViewportView(jOrdersList);
-
-        jScrollPane2.setMinimumSize(new java.awt.Dimension(207, 300));
-        jScrollPane2.setPreferredSize(new java.awt.Dimension(207, 300));
-
-        jDatesList.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                generalKeyPressed(evt);
-            }
-        });
-        jDatesList.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
-            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
-                jDatesListValueChanged(evt);
-            }
-        });
-        jScrollPane2.setViewportView(jDatesList);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -98,19 +75,12 @@ public class FrameHistorySearch extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(1, 1, 1)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addComponent(orderField, javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(doSearchBtn, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 370, Short.MAX_VALUE)
+                    .addComponent(orderField, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(doSearchBtn, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(1, 1, 1))
         );
-
-        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jScrollPane1, jScrollPane2});
-
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
@@ -120,15 +90,11 @@ public class FrameHistorySearch extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(doSearchBtn)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 301, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 301, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(1, 1, 1))
         );
 
         layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jLabel1, orderField});
-
-        layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jScrollPane1, jScrollPane2});
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -139,31 +105,23 @@ public class FrameHistorySearch extends javax.swing.JFrame {
         mainFrame.setEnabled(false);
         setLocationRelativeTo(null);
         jOrdersList.setModel(ordersList);
-        jDatesList.setModel(datesList);
     }
 
     private void doSearch() {
         MySqlConnector mySqlInstance = MySqlConnector.getInstance();
         Connection connection = mySqlInstance.connect();
         try {
-            Statement stmt = connection.createStatement();
-            ResultSet rs = stmt.executeQuery(
-                    "SELECT `history` FROM `exchange` WHERE `department_id` = '" + Options.getDepartmentName() + "'");
-            String oldHistoryString = "";
-            while (rs.next()) {
-                oldHistoryString = rs.getString("history");
-                if (rs.getString("history") == null) {
-                    oldHistoryString = "";
-                }
-            }
+            String depName = Options.getDepartmentName();
             ordersList.clear();
-            datesList.clear();
-            for (String order : oldHistoryString.split(";")) {
-                String orderName = Service.extractOrderParam(order, 1);
-                if (orderName.contains(orderField.getText())) {
-                    ordersList.addElement(orderName);
-                    datesList.addElement(Service.extractOrderParam(order, 2));
-                }
+
+            PreparedStatement prepStmt = connection.prepareStatement(
+                    "SELECT * FROM `exchange_history` WHERE `dep_id` = ? AND `order_name` LIKE ? ORDER BY `id` DESC");
+            prepStmt.setString(1, depName);
+            prepStmt.setString(2, "%" + orderField.getText() + "%");
+
+            ResultSet rs = prepStmt.executeQuery();
+            while (rs.next()) {
+                ordersList.addElement(depName + "/" + rs.getInt("order_name") + "                         " + rs.getString("time"));
             }
 
             if (ordersList.isEmpty()) {
@@ -177,9 +135,8 @@ public class FrameHistorySearch extends javax.swing.JFrame {
             orderField.setText("");
 
         } catch (SQLException ex) {
-            String errorMsg = "Неизвестная ошибка. Описание:";
-            JOptionPane.showMessageDialog(null, "SQLException. Произошла ошибка при чтении архива. \r\n"
-                    + errorMsg + "\r\n" + "ex: " + ex, this.getClass().getName() + " : doSearch()", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Произошла ошибка при чтении архива. \r\n"
+                    + "ex: " + ex, this.getClass().getName() + " : doSearch()", JOptionPane.ERROR_MESSAGE);
         } finally {
             mySqlInstance.disconnect();
         }
@@ -202,24 +159,13 @@ public class FrameHistorySearch extends javax.swing.JFrame {
         mainFrame.setEnabled(true);
     }//GEN-LAST:event_formWindowClosing
 
-    private void jOrdersListValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_jOrdersListValueChanged
-        jDatesList.setSelectedIndex(jOrdersList.getSelectedIndex());
-    }//GEN-LAST:event_jOrdersListValueChanged
-
-    private void jDatesListValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_jDatesListValueChanged
-        jOrdersList.setSelectedIndex(jDatesList.getSelectedIndex());
-    }//GEN-LAST:event_jDatesListValueChanged
-
     private final DefaultListModel ordersList = new DefaultListModel();
-    private final DefaultListModel datesList = new DefaultListModel();
     private final FrameMain mainFrame;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton doSearchBtn;
-    private javax.swing.JList jDatesList;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JList jOrdersList;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTextField orderField;
     // End of variables declaration//GEN-END:variables
 }
