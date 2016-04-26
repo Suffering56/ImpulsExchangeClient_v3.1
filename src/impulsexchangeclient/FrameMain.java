@@ -211,7 +211,6 @@ public class FrameMain extends javax.swing.JFrame {
         this.setLocationRelativeTo(null);
         this.setIconImage(Toolkit.getDefaultToolkit().getImage("icon.png"));
         orderNameField.requestFocusInWindow();
-        noMonitor.doClick();
     }
 
     private void formWindowGainedFocus(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowGainedFocus
@@ -330,7 +329,7 @@ public class FrameMain extends javax.swing.JFrame {
 
     public void setDefaultState() {
         orderNameField.setText(null);
-        //noMonitor.setSelected(false);
+        noMonitor.setSelected(false);
         noSwnd.setSelected(false);
     }
 
